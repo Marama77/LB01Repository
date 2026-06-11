@@ -11,19 +11,19 @@ jobs:
         with:
           node-version: 'lts/Iron'
 
-      - run: echo "📦 Install Yarn"
+      - run: echo "Install Yarn"
       - run: npm install -g yarn
 
-      - run: echo "📦 Install Dependencies"
+      - run: echo "Install Dependencies"
       - run: yarn install
 
-      - run: echo "🧪 Lint Code"
+      - run: echo "Lint Code"
       - run: yarn run lint
 
-      - run: echo "💉 Test Code"
+      - run: echo "Test Code"
       - run: yarn run test
 
-      - run: echo "📦 Build Application"
+      - run: echo "Build Application"
       - run: yarn run build
 
       - name: Build Docker Image
