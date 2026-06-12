@@ -1,5 +1,5 @@
 # Use the official Node.js image as the base image
-FROM node:lts/Iron
+FROM node:22-alpine
 
 # Set the working directory inside the container
 WORKDIR /app
@@ -12,6 +12,9 @@ RUN yarn install
 
 # Copy the source code to the container
 COPY . .
+
+RUN yarn run lint
+RUN yarn run test
 
 # Run build
 RUN yarn run build
