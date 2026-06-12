@@ -13,6 +13,9 @@ RUN yarn install
 # Copy the source code to the container
 COPY . .
 
+RUN yarn run lint
+RUN yarn run test
+
 # Run build
 RUN yarn run build
 

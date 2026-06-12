@@ -1,52 +1,59 @@
 name: CI Pipeline
-on: [push]
+
+on:
+  push:
+    branches:
+      - master
+      - development
+      - 'feature/**'
+
 jobs:
-  Lint-Test-Build-Application:
+  lint:
     runs-on: self-hosted
     steps:
-      - name: Check out repository code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+      - name: Install dependencies
+        run: yarn install
+      - name: Run linter
+        run: yarn lint
 
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 'lts/Iron'
+  test:
+    runs-on: self-hosted
+    needs: lint
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install dependencies
+        run: yarn install
+      - name: Run tests
+        run: yarn test
 
-      - run: echo "Install Yarn"
-      - run: npm install -g yarn
-
-      - run: echo "Install Dependencies"
-      - run: yarn install
-
-      - run: echo "Lint Code"
-      - run: yarn run lint
-
-      - run: echo "Test Code"
-      - run: yarn run test
-
-      - run: echo "Build Application"
-      - run: yarn run build
-
+  build:
+    runs-on: self-hosted
+    needs: test
+    steps:
+      - uses: actions/checkout@v4
       - name: Build Docker Image
-        run: docker build -t <marama77>/my-application:latest .
-      
+        run: docker build -t marama77/my-application:latest .
+
+  deploy:
+    runs-on: self-hosted
+    needs: build
+    if: github.ref == 'refs/heads/master'
+    steps:
+      - uses: actions/checkout@v4
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
-
-      - name: Push Docker Image to Docker Hub
-        run: docker push <marama77>/my-application:latest
-
+      - name: Push Docker Image
+        run: docker push marama77/my-application:latest
       - name: Configure kubeconfig
-        run: |
-          echo "${{ secrets.KUBECONFIG }}" > ~/.kube/config
-
+        run: echo "${{ secrets.KUBECONFIG }}" > ~/.kube/config
       - name: Set up kubectl
         uses: azure/setup-kubectl@v3
         with:
           version: 'latest'
-
       - name: Deploy to Kubernetes
         run: |
           kubectl apply -f k8s/deployment.yaml
