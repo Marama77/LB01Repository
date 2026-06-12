@@ -6,4 +6,5 @@ module.exports = {
   testRegex: './server/.*\\.(test|spec)?\\.(ts|ts)$',
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
   roots: ['<rootDir>/server'],
+  runInBand: true,
 };
