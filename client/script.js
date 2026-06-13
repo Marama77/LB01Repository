@@ -22,11 +22,18 @@
       case 'activeUsers':
         activeUsers = message.users;
         break;
-      case 'typing':
-        typingUsers = message.users;
-        break;
-      default:
-        break;
+        case 'typing':
+          typingUsers = message.users;
+          const typingNames = typingUsers
+            .filter(u => u.id !== myUser.id)
+            .map(u => u.name);
+          if (typingNames.length > 0) {
+            document.getElementById('typingUsers').textContent = 
+              typingNames.join(', ') + ' schreibt gerade...';
+          } else {
+            document.getElementById('typingUsers').textContent = '';
+          }
+          break;
     }
   });
   socket.addEventListener('close', (event) => {
