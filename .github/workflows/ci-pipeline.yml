@@ -36,7 +36,7 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Push Docker Image to Docker Hub
-        run: docker push <marama77>/my-application:latest
+        run: docker push marama77/my-application:latest
 
       - name: Configure kubeconfig
         run: |
