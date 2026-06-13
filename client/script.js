@@ -21,6 +21,8 @@
         break;
       case 'activeUsers':
         activeUsers = message.users;
+        document.getElementById('activeUsers').textContent = 
+          'Verbundene Benutzer: ' + activeUsers.map(u => u.name).join(', ');
         break;
       case 'typing':
         typingUsers = message.users;
