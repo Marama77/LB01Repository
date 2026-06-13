@@ -6,9 +6,9 @@ const port = 3000;
 describe('WebSocket Server', () => {
   let server: Server;
   let user: User;
-  const client = WebSocket;
+  
 
-  let testNewUserMessage: Message;
+  
   beforeAll(async () => {
     user = {
       id: '1',
